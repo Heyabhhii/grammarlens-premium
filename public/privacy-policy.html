@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>GrammarLens Premium — Privacy Policy</title>
+  <style>
+    body { max-width: 800px; margin: 40px auto; padding: 0 20px;
+           font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+           font-size: 15px; line-height: 1.7; color: #1f2937; }
+    h1   { font-size: 26px; font-weight: 700; margin-bottom: 6px; }
+    h2   { font-size: 17px; font-weight: 700; margin: 32px 0 8px; color: #374151; }
+    p, ul { margin: 0 0 14px; }
+    ul   { padding-left: 22px; }
+    li   { margin-bottom: 6px; }
+    .meta { font-size: 13px; color: #6b7280; margin-bottom: 32px; }
+    a    { color: #7c3aed; }
+    .highlight { background: #faf5ff; border-left: 4px solid #7c3aed;
+                 padding: 12px 16px; border-radius: 0 8px 8px 0; margin: 16px 0; }
+  </style>
+</head>
+<body>
+
+<h1>GrammarLens Premium — Privacy Policy</h1>
+<p class="meta">Last updated: June 2026 &nbsp;|&nbsp; Developer: Antier Solutions</p>
+
+<div class="highlight">
+  <strong>Short version:</strong> GrammarLens sends your document text to LanguageTool's public API
+  for grammar checking. It uses Google OAuth to apply fixes via the Google Docs API.
+  We do not store your documents, track your usage, or share data with third parties.
+</div>
+
+<h2>1. What data we process</h2>
+<ul>
+  <li><strong>Document text</strong> — The text content of your open Google Doc is sent to
+      the LanguageTool public API (<code>api.languagetool.org</code>) for grammar and
+      spelling analysis. Text is transmitted over HTTPS. LanguageTool's own privacy
+      policy governs their handling of submitted text.</li>
+  <li><strong>Google OAuth token</strong> — When you sign in with Google, a short-lived
+      access token is obtained via <code>chrome.identity.getAuthToken</code> and stored
+      temporarily in the extension's service worker memory. It is used exclusively to
+      call the Google Docs REST API (<code>docs.googleapis.com</code>) to apply
+      corrections you explicitly request. The token is never transmitted to any server
+      other than Google's APIs.</li>
+  <li><strong>Settings</strong> — Your language preference, check interval, highlight
+      colours, and other settings are stored locally in
+      <code>chrome.storage.sync</code> and synced across your Chrome browsers via
+      Google's storage sync service. These settings do not leave your Google
+      account's infrastructure.</li>
+</ul>
+
+<h2>2. What data we do NOT collect</h2>
+<ul>
+  <li>We do not store, log, or retain document text after a grammar check completes.</li>
+  <li>We do not track which documents you open, how often you use the extension,
+      or what corrections you apply.</li>
+  <li>We do not use analytics, advertising cookies, or third-party tracking SDKs.</li>
+  <li>We do not share any data with advertisers, data brokers, or other third parties.</li>
+</ul>
+
+<h2>3. Google OAuth scopes</h2>
+<p>GrammarLens requests the following OAuth scopes:</p>
+<ul>
+  <li><code>https://www.googleapis.com/auth/documents</code> — Required to apply
+      text corrections directly to your Google Doc via the Docs REST API.</li>
+  <li><code>https://www.googleapis.com/auth/userinfo.email</code> — Used only to
+      display your account email address in the diagnostics panel.</li>
+  <li><code>https://www.googleapis.com/auth/userinfo.profile</code> — Used only to
+      display your display name in the diagnostics panel.</li>
+</ul>
+<p>OAuth access is optional. If you do not sign in, grammar checking and inline
+   suggestions still work; only the "Fix" button (which writes changes to Google
+   Docs via the API) requires OAuth.</p>
+
+<h2>4. Third-party services</h2>
+<ul>
+  <li><strong>LanguageTool</strong> (<a href="https://languagetool.org/legal/privacy" target="_blank">Privacy Policy</a>) —
+      Document text is sent to their public API for grammar analysis.</li>
+  <li><strong>Google APIs</strong> (<a href="https://policies.google.com/privacy" target="_blank">Privacy Policy</a>) —
+      OAuth tokens and document fix requests are processed by Google's infrastructure.</li>
+</ul>
+
+<h2>5. Data retention</h2>
+<p>No document data is retained by GrammarLens beyond the duration of a single
+   grammar check request. Settings are retained in <code>chrome.storage.sync</code>
+   until you reset or uninstall the extension.</p>
+
+<h2>6. Children's privacy</h2>
+<p>GrammarLens is not directed at children under 13. We do not knowingly collect
+   information from children under 13.</p>
+
+<h2>7. Changes to this policy</h2>
+<p>If we make material changes to this policy, we will update the "Last updated"
+   date above. Continued use of the extension constitutes acceptance of the
+   updated policy.</p>
+
+<h2>8. Contact</h2>
+<p>Questions about this privacy policy can be sent to:<br/>
+   <strong>Antier Solutions</strong><br/>
+   <a href="mailto:abhi.chugh@antiersolutions.com">abhi.chugh@antiersolutions.com</a>
+</p>
+
+</body>
+</html>

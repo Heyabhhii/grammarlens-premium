@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GrammarLens — Suggestions</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      width: 100%;
+      height: 100vh;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      font-size: 14px;
+      color: #1f2937;
+      background: #fff;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    /* ── Header ── */
+    .gl-panel-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 16px;
+      border-bottom: 1px solid #e5e7eb;
+      flex-shrink: 0;
+    }
+    .gl-panel-title {
+      font-size: 15px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .gl-count-badge {
+      background: #7c3aed;
+      color: #fff;
+      border-radius: 12px;
+      padding: 1px 8px;
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    /* ── Tabs ── */
+    .gl-tabs {
+      display: flex;
+      border-bottom: 1px solid #e5e7eb;
+      padding: 0 12px;
+      flex-shrink: 0;
+      overflow-x: auto;
+    }
+    .gl-tabs::-webkit-scrollbar { display: none; }
+    [data-tab] {
+      padding: 10px 12px;
+      font-size: 12px;
+      font-weight: 500;
+      color: #6b7280;
+      border-bottom: 2px solid transparent;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: color 0.15s, border-color 0.15s;
+    }
+    [data-tab].active,
+    [data-tab]:hover {
+      color: #7c3aed;
+      border-bottom-color: #7c3aed;
+    }
+
+    /* ── Suggestions List ── */
+    #gl-suggestions-list {
+      flex: 1;
+      overflow-y: auto;
+      padding: 8px 0;
+    }
+    .gl-card {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 12px 16px;
+      cursor: pointer;
+      transition: background 0.12s;
+      border-bottom: 1px solid #f3f4f6;
+    }
+    .gl-card:hover { background: #faf5ff; }
+    .gl-dot {
+      width: 10px; height: 10px;
+      border-radius: 50%;
+      flex-shrink: 0;
+      margin-top: 4px;
+    }
+    .gl-card-body { flex: 1; }
+    .gl-error-word {
+      font-size: 15px;
+      font-weight: 700;
+      color: #111827;
+      display: block;
+      margin-bottom: 2px;
+    }
+    .gl-message {
+      font-size: 12px;
+      color: #6b7280;
+      line-height: 1.4;
+    }
+    .gl-card-actions {
+      display: flex;
+      gap: 6px;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+    .gl-btn-fix, .gl-btn-dismiss {
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      transition: background 0.15s;
+    }
+    .gl-btn-fix {
+      background: #7c3aed;
+      color: #fff;
+    }
+    .gl-btn-fix:hover { background: #6d28d9; }
+    .gl-btn-dismiss {
+      background: #f3f4f6;
+      color: #374151;
+    }
+    .gl-btn-dismiss:hover { background: #e5e7eb; }
+    .gl-empty {
+      padding: 32px 16px;
+      text-align: center;
+      color: #9ca3af;
+      font-size: 13px;
+    }
+
+    /* ── Bulk Actions Footer ── */
+    .gl-bulk-bar {
+      padding: 10px 16px;
+      border-top: 1px solid #e5e7eb;
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      flex-shrink: 0;
+    }
+    .gl-bulk-btn {
+      padding: 5px 10px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 600;
+      cursor: pointer;
+      border: 1px solid #e5e7eb;
+      background: #fff;
+      color: #374151;
+      transition: background 0.15s;
+    }
+    .gl-bulk-btn:hover { background: #f3f4f6; }
+  </style>
+</head>
+<body>
+  <div class="gl-panel-header">
+    <span class="gl-panel-title">
+      Review suggestions
+      <span class="gl-count-badge" id="gl-count">0</span>
+    </span>
+  </div>
+
+  <div class="gl-tabs" role="tablist">
+    <span data-tab="all"          role="tab" class="active">All</span>
+    <span data-tab="correctness"  role="tab">Correctness</span>
+    <span data-tab="clarity"      role="tab">Clarity</span>
+    <span data-tab="engagement"   role="tab">Engagement</span>
+    <span data-tab="delivery"     role="tab">Delivery</span>
+  </div>
+
+  <div id="gl-suggestions-list" role="list">
+    <p class="gl-empty">Checking your document…</p>
+  </div>
+
+  <div class="gl-bulk-bar">
+    <button class="gl-bulk-btn" id="gl-fix-all-grammar">Fix All Grammar</button>
+    <button class="gl-bulk-btn" id="gl-fix-all-spelling">Fix All Spelling</button>
+    <button class="gl-bulk-btn" id="gl-dismiss-all">Dismiss All</button>
+    <button class="gl-bulk-btn" id="gl-recheck">Recheck</button>
+  </div>
+
+  <script src="../../dist/sidepanel.js"></script>
+</body>
+</html>

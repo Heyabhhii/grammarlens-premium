@@ -1,0 +1,94 @@
+/* ─── GrammarLens Content Styles ──────────────────────────────────────────── */
+/* These are injected into every page via manifest content_scripts.css        */
+/* All selectors are namespaced with gl- to avoid collisions                  */
+
+/* ── Floating Trigger Button ─────────────────────────────────────────────── */
+#gl-floating-btn {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 2147483647; /* max z-index */
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: #7c3aed; /* Grammarly-style purple */
+  box-shadow: 0 4px 16px rgba(124, 58, 237, 0.4);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  user-select: none;
+}
+
+#gl-floating-btn:hover {
+  transform: scale(1.08);
+  box-shadow: 0 6px 20px rgba(124, 58, 237, 0.55);
+}
+
+#gl-floating-btn:active {
+  transform: scale(0.96);
+}
+
+/* Suggestion count badge */
+.gl-badge {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  min-width: 18px;
+  height: 18px;
+  border-radius: 9px;
+  background: #ef4444;
+  color: #fff;
+  font-size: 10px;
+  font-weight: 700;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  line-height: 18px;
+  text-align: center;
+  padding: 0 4px;
+  box-sizing: border-box;
+  border: 2px solid #fff;
+  pointer-events: none;
+}
+
+/* ── Underline Highlight Layer ───────────────────────────────────────────── */
+/* Applied to a transparent absolutely-positioned overlay over the text.     */
+
+.gl-underline {
+  pointer-events: none;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  border-radius: 1px;
+}
+
+.gl-underline--error {
+  background: #ef4444;
+}
+
+.gl-underline--spelling {
+  background: transparent;
+  border-bottom: 2px dotted #ef4444;
+}
+
+.gl-underline--style {
+  background: #7c3aed;
+}
+
+.gl-underline--clarity {
+  background: #3b82f6;
+}
+
+/* ── Error Flash Animation ────────────────────────────────────────────────── */
+@keyframes gl-flash {
+  0%   { background-color: transparent; }
+  25%  { background-color: rgba(253, 224, 71, 0.6); }
+  75%  { background-color: rgba(253, 224, 71, 0.6); }
+  100% { background-color: transparent; }
+}
+
+.gl-flash {
+  animation: gl-flash 0.8s ease-in-out;
+}

@@ -1,0 +1,103 @@
+<!-- GrammarLens Shadow DOM Template
+     Injected into ShadowRoot by SidebarPanel.
+     All IDs are prefixed gl- to avoid conflicts. -->
+
+<!-- ── Floating Action Button ───────────────────────────────────────────── -->
+<button class="gl-fab" id="gl-fab" aria-label="GrammarLens — toggle suggestions" aria-expanded="false">
+  <svg viewBox="0 0 24 24" aria-hidden="true">
+    <path d="M12 20h9"/>
+    <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/>
+  </svg>
+  <span class="gl-fab-badge" id="gl-fab-badge" aria-label="suggestion count">0</span>
+</button>
+
+<!-- ── Sidebar ──────────────────────────────────────────────────────────── -->
+<aside class="gl-sidebar" id="gl-sidebar" aria-label="GrammarLens suggestions panel" role="complementary">
+
+  <!-- Resize handle (left edge, drag to change width) -->
+  <div class="gl-resize-handle" id="gl-resize-handle" role="separator" aria-label="Resize panel"></div>
+
+  <!-- Header -->
+  <header class="gl-header" id="gl-header">
+    <div class="gl-header-logo" aria-hidden="true">
+      <svg viewBox="0 0 16 16">
+        <path d="M14 2H2a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V3a1 1 0 0 0-1-1zM5 11H3V7h2v4zm4 0H7V5h2v6zm4 0h-2V9h2v2z"/>
+      </svg>
+    </div>
+    <div class="gl-header-title-group">
+      <div class="gl-header-title">GrammarLens</div>
+      <div class="gl-header-subtitle" id="gl-header-subtitle">Review suggestions</div>
+    </div>
+    <div id="gl-spinner-slot" style="display:none">
+      <div class="gl-spinner" aria-label="Checking…"></div>
+    </div>
+    <span class="gl-count-badge" id="gl-count-badge" aria-label="suggestion count">0</span>
+    <button class="gl-close-btn" id="gl-close-btn" aria-label="Close suggestions panel">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+        <line x1="18" y1="6" x2="6" y2="18"/>
+        <line x1="6" y1="6" x2="18" y2="18"/>
+      </svg>
+    </button>
+  </header>
+
+  <!-- Category tabs -->
+  <nav class="gl-tabs" id="gl-tabs" role="tablist" aria-label="Suggestion categories">
+    <button class="gl-tab gl-tab--active" data-tab="all"          role="tab" aria-selected="true"  tabindex="0">All</button>
+    <button class="gl-tab"                data-tab="correctness"  role="tab" aria-selected="false" tabindex="-1">Correctness</button>
+    <button class="gl-tab"                data-tab="clarity"      role="tab" aria-selected="false" tabindex="-1">Clarity</button>
+    <button class="gl-tab"                data-tab="engagement"   role="tab" aria-selected="false" tabindex="-1">Engagement</button>
+    <button class="gl-tab"                data-tab="delivery"     role="tab" aria-selected="false" tabindex="-1">Delivery</button>
+  </nav>
+
+  <!-- Main content area (loading / empty / error / list) -->
+  <div class="gl-body" id="gl-body" role="tabpanel">
+    <!-- Populated dynamically by SidebarPanel.renderBody() -->
+  </div>
+
+  <!-- Footer: language selector + bulk actions -->
+  <footer class="gl-footer" id="gl-footer">
+    <div class="gl-lang-row" id="gl-lang-row">
+      <!-- LanguageSelector renders here -->
+    </div>
+    <div class="gl-bulk-row">
+      <button class="gl-bulk-btn" id="gl-btn-fix-grammar"  title="Fix all grammar errors">Fix Grammar</button>
+      <button class="gl-bulk-btn" id="gl-btn-fix-spelling" title="Fix all spelling errors">Fix Spelling</button>
+      <button class="gl-bulk-btn" id="gl-btn-dismiss-all"  title="Dismiss all suggestions">Dismiss All</button>
+      <button class="gl-bulk-btn" id="gl-btn-recheck"      title="Recheck entire document">Recheck</button>
+    </div>
+  </footer>
+
+  <!-- Diagnostics panel (collapsed by default, toggle with chevron) -->
+  <div class="gl-diagnostics" id="gl-diagnostics">
+    <button class="gl-diag-toggle" id="gl-diag-toggle" aria-expanded="false" aria-controls="gl-diag-body">
+      <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true">
+        <polyline points="6 9 12 15 18 9"/>
+      </svg>
+      GrammarLens Status
+    </button>
+    <div class="gl-diag-body" id="gl-diag-body" aria-hidden="true">
+      <dl class="gl-diag-list">
+        <div class="gl-diag-row">
+          <dt>OAuth</dt>
+          <dd id="gl-diag-auth"><span class="gl-diag-dot gl-diag-dot--unknown"></span> Checking…</dd>
+        </div>
+        <div class="gl-diag-row">
+          <dt>Account</dt>
+          <dd id="gl-diag-account">—</dd>
+        </div>
+        <div class="gl-diag-row">
+          <dt>Document</dt>
+          <dd id="gl-diag-docid">—</dd>
+        </div>
+        <div class="gl-diag-row gl-diag-row--error" id="gl-diag-error-row" style="display:none">
+          <dt>Error</dt>
+          <dd id="gl-diag-error">—</dd>
+        </div>
+      </dl>
+      <button class="gl-diag-signin-btn" id="gl-diag-signin" style="display:none">
+        Sign in with Google
+      </button>
+    </div>
+  </div>
+
+</aside>

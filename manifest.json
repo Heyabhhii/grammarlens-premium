@@ -1,0 +1,115 @@
+{
+  "manifest_version": 3,
+  "name": "GrammarLens Premium",
+  "version": "1.0.0",
+  "description": "Free, production-grade grammar, spelling, and style checker. Grammarly alternative with Wren & Martin explanations.",
+  "author": "Antier Solutions",
+  "icons": {
+    "16": "public/icons/icon16.png",
+    "32": "public/icons/icon32.png",
+    "48": "public/icons/icon48.png",
+    "128": "public/icons/icon128.png"
+  },
+  "action": {
+    "default_popup": "public/popup/popup.html",
+    "default_icon": {
+      "16": "public/icons/icon16.png",
+      "32": "public/icons/icon32.png",
+      "48": "public/icons/icon48.png",
+      "128": "public/icons/icon128.png"
+    },
+    "default_title": "GrammarLens Premium"
+  },
+  "side_panel": {
+    "default_path": "public/sidepanel/sidepanel.html"
+  },
+  "background": {
+    "service_worker": "background.js",
+    "type": "module"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://docs.google.com/*"
+      ],
+      "js": [
+        "content.js"
+      ],
+      "css": [
+        "content.css"
+      ],
+      "run_at": "document_idle",
+      "all_frames": false
+    }
+  ],
+  "permissions": [
+    "storage",
+    "identity",
+    "activeTab",
+    "sidePanel",
+    "contextMenus"
+  ],
+  "host_permissions": [
+    "https://docs.google.com/*",
+    "https://api.languagetool.org/*",
+    "https://docs.googleapis.com/*",
+    "https://www.googleapis.com/*",
+    "https://api.groq.com/*"
+  ],
+  "oauth2": {
+    "client_id": "304851146769-vprc1l1l2u3kemrug3nfklo29ovadl5f.apps.googleusercontent.com",
+    "scopes": [
+      "https://www.googleapis.com/auth/documents",
+      "https://www.googleapis.com/auth/userinfo.email",
+      "https://www.googleapis.com/auth/userinfo.profile"
+    ]
+  },
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "public/icons/*",
+        "dist/content.css"
+      ],
+      "matches": [
+        "<all_urls>"
+      ]
+    }
+  ],
+  "commands": {
+    "open-panel": {
+      "suggested_key": {
+        "default": "Alt+G",
+        "mac": "Alt+G"
+      },
+      "description": "Open GrammarLens suggestion panel"
+    },
+    "fix-current": {
+      "description": "Fix current suggestion"
+    },
+    "next-suggestion": {
+      "suggested_key": {
+        "default": "Alt+N",
+        "mac": "Alt+N"
+      },
+      "description": "Next suggestion"
+    },
+    "prev-suggestion": {
+      "suggested_key": {
+        "default": "Alt+P",
+        "mac": "Alt+P"
+      },
+      "description": "Previous suggestion"
+    },
+    "recheck-doc": {
+      "suggested_key": {
+        "default": "Alt+R",
+        "mac": "Alt+R"
+      },
+      "description": "Recheck entire document"
+    }
+  },
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self'"
+  },
+  "options_page": "settings/settings.html"
+}
