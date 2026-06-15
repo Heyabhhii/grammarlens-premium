@@ -43,7 +43,7 @@ export function bestReplacement(
   original:     string,
   replacements: ReadonlyArray<ProcessedReplacement>
 ): string {
-  if (replacements.length === 0) return '';
+  if (replacements.length === 0) return inferFallback(original);
   if (replacements.length === 1) return replacements[0]!.value;
 
   const firstFallback = replacements[0]!.value;
@@ -101,6 +101,27 @@ function hasApostrophe(s: string): boolean {
 }
 
 /**
+ * When LanguageTool provides no replacements, infer a candidate by stripping
+ * the first (extra) word from a multi-word error token.
+ *
+ * Example: "We the" → "The"  (extra leading word removed, cap preserved)
+ * Example: "is are" → "are"
+ * Single-word tokens: return '' (no safe inference possible).
+ */
+function inferFallback(original: string): string {
+  const tokens = original.trim().split(/\s+/);
+  if (tokens.length < 2) return '';
+  // Take all tokens except the first (remove the extra leading word)
+  const candidate = tokens.slice(1).join(' ');
+  // Match capitalisation of the original
+  const origCap = capPattern(original);
+  if (origCap === 'title' || origCap === 'upper') {
+    return candidate.charAt(0).toUpperCase() + candidate.slice(1);
+  }
+  return candidate.charAt(0).toLowerCase() + candidate.slice(1);
+}
+
+/**
  * Standard Levenshtein edit distance (O(m*n) DP).
  * Operates on the full character sequence; caller should normalise case first.
  */
@@ -109,23 +130,19 @@ export function levenshtein(a: string, b: string): number {
   const n = b.length;
   if (m === 0) return n;
   if (n === 0) return m;
-
-  // Use two rolling arrays for O(min(m,n)) space
   let prev = Array.from({ length: n + 1 }, (_, j) => j);
   let curr = new Array<number>(n + 1);
-
   for (let i = 1; i <= m; i++) {
     curr[0] = i;
     for (let j = 1; j <= n; j++) {
       const cost = a[i - 1] === b[j - 1] ? 0 : 1;
       curr[j] = Math.min(
-        (prev[j]   ?? i) + 1,         // deletion
-        (curr[j - 1] ?? j) + 1,       // insertion
-        (prev[j - 1] ?? 0) + cost     // substitution
+        (prev[j]   ?? i) + 1,
+        (curr[j - 1] ?? j) + 1,
+        (prev[j - 1] ?? 0) + cost
       );
     }
     [prev, curr] = [curr, prev];
   }
-
   return prev[n] ?? 0;
 }

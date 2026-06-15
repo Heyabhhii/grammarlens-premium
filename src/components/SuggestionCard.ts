@@ -219,9 +219,10 @@ function buildActions(s: ProcessedSuggestion, callbacks: CardCallbacks): HTMLEle
 
   const fixBtn = document.createElement('button');
   fixBtn.className = 'gl-btn gl-btn--fix';
-  fixBtn.textContent = firstReplacement ? `Fix: "${firstReplacement}"` : 'Fix';
-  fixBtn.setAttribute('aria-label', `Fix: replace with "${firstReplacement}"`);
-  if (!firstReplacement) fixBtn.disabled = true;
+  fixBtn.textContent = firstReplacement ? `Fix: "${firstReplacement}"` : 'No auto-fix';
+  fixBtn.setAttribute('aria-label', firstReplacement ? `Fix: replace with "${firstReplacement}"` : 'No automatic fix available — edit manually');
+  fixBtn.title = firstReplacement ? '' : 'No replacement available — fix this manually in the document';
+  fixBtn.disabled = !firstReplacement;
   fixBtn.addEventListener('click', (e) => {
     e.stopPropagation();
     if (firstReplacement) callbacks.onFix(s.id, firstReplacement);

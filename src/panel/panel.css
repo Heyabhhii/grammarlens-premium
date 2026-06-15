@@ -564,6 +564,13 @@
   color: #fff;
 }
 .gl-btn--fix:hover { background: var(--gl-primary-dark); }
+.gl-btn--fix:disabled {
+  background: var(--gl-border);
+  color: var(--gl-text-secondary);
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+.gl-btn--fix:disabled:active { transform: none; }
 
 .gl-btn--dismiss {
   background: var(--gl-border-light);
