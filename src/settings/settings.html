@@ -199,6 +199,16 @@
     </div>
     <div class="form-row">
       <div>
+        <div class="form-label">Groq model</div>
+        <div class="form-hint">Fast is recommended for most users. Accurate is slower but catches more subtle errors.</div>
+      </div>
+      <select id="aiModel">
+        <option value="llama-3.1-8b-instant">llama-3.1-8b-instant (Fast)</option>
+        <option value="llama-3.3-70b-versatile">llama-3.3-70b-versatile (Accurate)</option>
+      </select>
+    </div>
+    <div class="form-row">
+      <div>
         <div class="form-label">Confidence threshold</div>
         <div class="form-hint">AI corrections below this score fall back to LanguageTool's suggestion (0.5–1.0, default 0.85)</div>
       </div>
@@ -221,6 +231,7 @@
   <!-- ── Actions ───────────────────────────────────────────────────── -->
   <div class="settings-actions">
     <button class="btn btn-danger"     id="btn-reset">Reset to defaults</button>
+    <button class="btn btn-secondary"  id="btn-clear-dismissed">Clear dismissed</button>
     <button class="btn btn-secondary"  id="btn-cancel">Cancel</button>
     <button class="btn btn-primary"    id="btn-save">Save settings</button>
   </div>

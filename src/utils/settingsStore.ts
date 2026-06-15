@@ -24,6 +24,8 @@ export interface AISettings {
   groqApiKey:          string;
   /** Minimum AI confidence to accept the correction (0.0–1.0) */
   confidenceThreshold: number;
+  /** Groq model to use for AI corrections */
+  groqModel:           string;
 }
 
 export interface GrammarLensSettings {
@@ -60,6 +62,7 @@ export const DEFAULT_SETTINGS: GrammarLensSettings = {
     enabled:             false,    // Off by default — user must opt in + provide key
     groqApiKey:          '',
     confidenceThreshold: 0.85,
+    groqModel:           'llama-3.1-8b-instant',
   },
 };
 

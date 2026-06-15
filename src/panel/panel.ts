@@ -187,7 +187,7 @@ export class SidebarPanel {
     );
     this.panelState = 'ready';
     this.errorMsg   = '';
-    this.updateBadge(this.allSuggestions.length);
+    this.updateBadge(this.activeSuggestionCount());
     this.renderBody();
   }
 
@@ -781,13 +781,4 @@ export class SidebarPanel {
       .replace(/>/g, '&gt;')
       .replace(/"/g, '&quot;');
   }
-}
-�── Utilities ────────────────────────────────────────────────────────────────
-
-function escapeHtml(str: string): string {
-  return str
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;');
 }

@@ -9,6 +9,7 @@ export interface AISettings {
   enabled:             boolean;
   groqApiKey:          string;
   confidenceThreshold: number;
+  groqModel?:          string;
 }
 
 interface SentenceContext {
@@ -195,7 +196,7 @@ async function recordDiag(patch: { aiCall?: true; cacheHit?: true; fallback?: tr
 
 // ─── Groq API ─────────────────────────────────────────────────────────────────
 
-async function callGroq(ctx: SentenceContext, errorWord: string, candidates: string[], apiKey: string): Promise<AIResult> {
+async function callGroq(ctx: SentenceContext, errorWord: string, candidates: string[], apiKey: string, model?: string): Promise<AIResult> {
   const prevPart = ctx.previousSentence ? `Previous sentence: "${ctx.previousSentence}"\n` : '';
   const nextPart = ctx.nextSentence     ? `\nNext sentence: "${ctx.nextSentence}"`          : '';
   const userMsg =
@@ -208,7 +209,7 @@ async function callGroq(ctx: SentenceContext, errorWord: string, candidates: str
     method: 'POST',
     headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${apiKey.trim()}` },
     body: JSON.stringify({
-      model: GROQ_MODEL, temperature: 0.1, max_tokens: 60,
+      model: model ?? GROQ_MODEL, temperature: 0.1, max_tokens: 60,
       messages: [{ role: 'system', content: SYSTEM_PROMPT }, { role: 'user', content: userMsg }],
     }),
   });
@@ -238,13 +239,14 @@ export class ContextEngine {
     console.log(`[GL:AI] enhanceSuggestions: ${suggestions.length} total, ${targets.length} AI targets:`, targets.map(s => s.errorText));
     if (targets.length === 0) return;
     const threshold = aiSettings.confidenceThreshold ?? 0.85;
+    const model = aiSettings.groqModel ?? GROQ_MODEL;
     await Promise.race([
-      Promise.allSettled(targets.map(s => this.enhanceOne(s, flatText, aiSettings.groqApiKey, threshold))),
+      Promise.allSettled(targets.map(s => this.enhanceOne(s, flatText, aiSettings.groqApiKey, threshold, model))),
       new Promise<void>(resolve => setTimeout(resolve, AI_TIMEOUT_MS + 500)),
     ]);
   }
 
-  private async enhanceOne(s: ProcessedSuggestion, flatText: string, apiKey: string, threshold: number): Promise<void> {
+  private async enhanceOne(s: ProcessedSuggestion, flatText: string, apiKey: string, threshold: number, model?: string): Promise<void> {
     const ctx      = extractContext(flatText, s.offset, s.length);
     const cacheKey = buildCacheKey(ctx.currentSentence, s.errorText);
     const cached   = await getFromCache(cacheKey);
@@ -257,7 +259,7 @@ export class ContextEngine {
     try {
       const candidates = s.replacements.slice(0, 5).map(r => r.value);
       console.log(`[GL:AI] Calling Groq for "${s.errorText}", candidates:`, candidates);
-      const result    = await callGroq(ctx, s.errorText, candidates, apiKey);
+      const result    = await callGroq(ctx, s.errorText, candidates, apiKey, model);
       const latencyMs = Math.round(performance.now() - t0);
       void recordDiag({ aiCall: true, latencyMs });
       console.log(`[GL:AI] "${s.errorText}" -> "${result.correction}" (confidence ${result.confidence}, ${latencyMs}ms)`);

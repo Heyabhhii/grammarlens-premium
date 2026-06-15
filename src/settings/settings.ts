@@ -44,9 +44,10 @@ async function populateForm(): Promise<void> {
 
   // AI settings
   const ai = settings.ai;
-  (el<HTMLInputElement>('aiEnabled')).checked  = ai.enabled;
-  (el<HTMLInputElement>('aiGroqKey')).value    = ai.groqApiKey;
-  (el<HTMLInputElement>('aiThreshold')).value  = String(ai.confidenceThreshold);
+  (el<HTMLInputElement>('aiEnabled')).checked    = ai.enabled;
+  (el<HTMLInputElement>('aiGroqKey')).value      = ai.groqApiKey;
+  (el<HTMLSelectElement>('aiModel')).value       = ai.groqModel ?? 'llama-3.1-8b-instant';
+  (el<HTMLInputElement>('aiThreshold')).value    = String(ai.confidenceThreshold);
   loadAIDiagnostics();
 
   const colors = settings.highlightColors;
@@ -83,6 +84,7 @@ function collectForm(): GrammarLensSettings {
     ai: {
       enabled:             (el<HTMLInputElement>('aiEnabled')).checked,
       groqApiKey:          (el<HTMLInputElement>('aiGroqKey')).value.trim(),
+      groqModel:           (el<HTMLSelectElement>('aiModel')).value || 'llama-3.1-8b-instant',
       confidenceThreshold: parseFloat((el<HTMLInputElement>('aiThreshold')).value) || 0.85,
     },
   };
@@ -231,6 +233,13 @@ function bindEvents(): void {
     await resetSettings();
     await populateForm();
     showToast('Settings reset to defaults');
+  });
+
+  // Clear dismissed suggestions
+  el('btn-clear-dismissed').addEventListener('click', async () => {
+    if (!confirm('Clear all dismissed suggestions? They will reappear on the next check.')) return;
+    await chrome.storage.local.remove('gl_dismissed_fingerprints');
+    showToast('✓ Dismissed suggestions cleared');
   });
 
   // Cancel — go back
